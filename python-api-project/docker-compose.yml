@@ -1,0 +1,41 @@
+version: "3.4"
+services:
+  python-api-project:
+    tty: true
+    image: "eduardomatoss/python-api-project"
+    stdin_open: true
+    build:
+      context: .
+      target: "development"
+    volumes:
+      - ".:/app"
+    environment:
+      - ENV_FOR_DYNACONF=development
+      - DATABASE_URL=python-api-project-db
+      - DATABASE_NAME=python-api-project
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_PORT=5432
+      - AWS_DEFAULT_REGION=us-east-1
+    ports:
+      - "8000:8000"
+    networks:
+      - db_nw
+
+  python-api-project-db:
+    image: postgres:11
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=python-api-project
+    networks:
+      - db_nw
+
+networks:
+  db_nw:
+    driver: bridge
+
+volumes:
+  python-api-project-db:
