@@ -65,7 +65,7 @@ class LogFormatter(Formatter):
     def format(self, record):
         log = {
             "timestamp": record.created,
-            "_application": "ousadia-api",
+            "_application": "python-api-project",
             "_environment": self._env,
             "_log_type": "application",
             "host": self._host,

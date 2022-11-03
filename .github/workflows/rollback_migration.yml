@@ -1,0 +1,37 @@
+name: Revert migrations
+on:
+  workflow_dispatch:
+    inputs:
+      migration_version:
+        description: 'Database revert version'
+        required: true
+
+jobs:
+  revert-migrations:
+    name: Revert migrations
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Running revert migrations for ${{ github.ref }} branch"
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Declare variables
+        id: vars
+        shell: bash
+        run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
+
+      - name: Building image for deploy
+        run: make image/build VERSION=${{ steps.vars.outputs.sha_short }}
+
+      - name: Run revert migrations
+        env:
+          VERSION: ${{ steps.vars.outputs.sha_short }}
+          MIGRATION_VERSION: ${{ github.event.inputs.migration_version }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
+          DATABASE_USER: ${{ secrets.DATABASE_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+        run: cd python-api-project && ./.deploy/rollback_migrations.sh
