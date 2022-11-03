@@ -1,0 +1,14 @@
+[default]
+application_name="python-api-project"
+application_description="Python API Project"
+
+default_log_level="INFO"
+default_access_log="True"
+
+[test]
+
+[qa]
+
+[prod]
+default_access_log="False"
+sentry_dsn=""
