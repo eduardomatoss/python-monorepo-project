@@ -1,6 +1,6 @@
 [default]
-application_name="ousadia-api"
-application_description="API responsible for validating NPS data"
+application_name="python-api-project"
+application_description="Python API Project"
 
 default_log_level="INFO"
 default_access_log="True"
